@@ -258,4 +258,10 @@ def play_game()-> int:
 
     return current_player.score
 
-play_game()
+SCORE = 0
+SCORE = play_game()
+
+with open('highscores.txt') as file:
+    file.write(SCORE)
+    print(chr(27) + "[2J")
+    cprint(Fore.LIGHTMAGENTA_EX + "Final Score: " + Fore.LIGHTYELLOW_EX + str(SCORE) + "\n")
