@@ -9,14 +9,16 @@ import subprocess
 import numpy as np
 
 class player:
-    decisions = np.array([])
-    inventory = np.array(["cyberdeck"])
-    abilities = np.array([])
-    status = np.array([])
-    name = "Neural Operative"
-    level = 1
-    score = 0
+    decisions = np.array([]) #intended to provide 'rpg-like' decision making with unique outcomes; 3 to 4 dimensional array
+    inventory = np.array(["cyberdeck"]) #one dimensional array of items used in game
+    abilities = np.array([]) #intended to provide 'rpg-like' skill tree implementation; 3 to 4 dimensional array
+    status = np.array([]) #intended to provide combat effects
     
+    name = "Neural Operative"
+    level = 1 #intended to provide level/skill-based challenge checks
+    score = 0 #intended to be written to highscores.txt at game end/termination
+
+#Allows for (almost) any keypress detection, wild how much code it takes to do this
 def read_single_keypress():
     """Waits for a single keypress on stdin.
 
@@ -70,8 +72,9 @@ def read_single_keypress():
         fcntl.fcntl(fd, fcntl.F_SETFL, flags_save)
     return tuple(ret)
 
+#Game start flavor
 def title() -> None:
-    print(chr(27) + "[2J")
+    print(chr(27) + "[2J") #clear screen print statement
     time.sleep(1)
     cprint(Fore.LIGHTMAGENTA_EX + "- presenting -".center(os.get_terminal_size().columns), attrs=['dark'])
     for i in range(9):
@@ -81,6 +84,7 @@ def title() -> None:
     time.sleep(1)
     cprint(Style.RESET_ALL)
 
+    #print title
     cprint(Fore.RED + "                                                                                       ".center(os.get_terminal_size().columns), attrs=['blink','dark'])
     cprint(Fore.RED + "                                                                                       ".center(os.get_terminal_size().columns), attrs=['blink','dark'])
     cprint(Fore.RED + "                                                                                       ".center(os.get_terminal_size().columns), attrs=['blink','dark'])
@@ -99,7 +103,7 @@ def title() -> None:
         print("\n")
     time.sleep(2)
     
-    #getpass.getpass(Fore.LIGHTMAGENTA_EX + " press any key to enter the future ".center(os.get_terminal_size().columns))
+    #FIX_ME attempt to center text irregardless of terminal size; column division needs work
     print(Fore.LIGHTMAGENTA_EX + "".center(int(os.get_terminal_size().columns/3)), end='')
     for x in ' press any key to enter the future ':
             cprint(Fore.LIGHTMAGENTA_EX + x, end='')
@@ -108,10 +112,13 @@ def title() -> None:
     print('', end='\n')
     read_single_keypress()
 
+#Story background
 def intro(x: player) -> None:
     print(chr(27) + "[2J")
     x.name = input(Fore.LIGHTMAGENTA_EX + "enter player name: " + Fore.RED)
     print(chr(27) + "[2J")
+    
+    #Textual introduction
     for x in '2079 A.D.':
             cprint(Fore.GREEN + x, attrs=['dark'], end='')
             sys.stdout.flush()
@@ -120,6 +127,8 @@ def intro(x: player) -> None:
 
     time.sleep(1)
 
+    #Animated introduction
+    #Following code is a test case for animating text in a terminal without text needing to be on the same line as the cursor
     nlines = 2
     # scroll up to make room for output
     print(f"\033[{nlines}S", end="")
@@ -139,6 +148,7 @@ def intro(x: player) -> None:
         time.sleep(.5)
 
 def level_1():
+    #Initial 'Text Adventure' game start
     def level_start() -> None:    
         print(chr(27) + "[2J")
         for x in 'You find yourself in the center of a room.':
@@ -181,31 +191,3 @@ def play_game()-> int:
     return current_player.score
 
 play_game()
- 
-#nlines = 2
-#    # scroll up to make room for output
-#print(f"\033[{nlines}S", end="")
-#
-#    # move cursor back up
-#print(f"\033[{nlines}A", end="")
-#
-#    # save current cursor position
-#print("\033[s", end="")
-#
-#x = '░'
-#for t in range(21):
-#    # restore saved cursor position
-#    print("\033[u", end="")
-#    print(f"Line one @ {x}")
-#    print(f"Line two @ {x}")
-#    
-#    if t%2 == 0:
-#        x = '▒'
-#    elif t%3 == 0:
-#        x = '▓'
-#    time.sleep(.1)
-
-
-
-
-
