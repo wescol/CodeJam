@@ -8,7 +8,7 @@ from random import uniform
 import subprocess
 import numpy as np
 
-class player:
+class Player:
     decisions = np.array([]) #intended to provide 'rpg-like' decision making with unique outcomes; 3 to 4 dimensional array
     inventory = np.array(["cyberdeck"]) #one dimensional array of items used in game
     abilities = np.array([]) #intended to provide 'rpg-like' skill tree implementation; 3 to 4 dimensional array
@@ -113,7 +113,7 @@ def title() -> None:
     read_single_keypress()
 
 #Story background
-def intro(x: player) -> None:
+def intro(x: Player) -> None:
     print(chr(27) + "[2J")
     x.name = input(Fore.LIGHTMAGENTA_EX + "enter player name: " + Fore.RED)
     print(chr(27) + "[2J")
@@ -147,6 +147,53 @@ def intro(x: player) -> None:
         t += 1
         time.sleep(.5)
 
+#RPG decision making helper
+def choice(valid_options: np.array([]), player_choose: str) -> tuple:
+    word = ""
+    word_count = 0
+    action = ""
+    action_item = ""
+    modifier_list = []
+
+    temp_word = ""
+    #Evaluates user input string "player_choose" to create actionable word list
+    for x in player_choose:
+        temp_word += x
+
+        #Evaluates staus of actionable input when whitespace is encountered
+        if x.isspace():
+            if len(action) > 0: #Check if action has been defined
+                action_item = temp_word
+                temp_word = ""
+                word_count += 1
+            elif word_count == 0: #Check for existing words; define action if empty
+                action = temp_word
+                temp_word = ""
+                word_count += 1
+            elif word_count > 2: #check for word modifier
+                modifier_list.append(temp_word)
+                temp_word = ""
+            else: #Ignore leading whitespace
+                temp_word = ""
+        elif x.isdigit() and not word_count == 0: #Check for numeric word modifier
+            modifier_list.append(temp_word)
+            temp_word = ""
+            word_count += 1
+        elif not x.isalpha(): #Check for invalid character
+            temp_word = ""
+
+    modifiers = np.array(modifier_list)
+
+    valid_choice = False
+    for x in valid_options:
+        if action == x:
+            valid_choice = True
+            break
+
+    choice_description = (action_item, modifiers, valid_choice) #Tuple interpretation of input choice values
+
+    return choice_description
+
 def level_1():
     #Initial 'Text Adventure' game start
     def level_start() -> None:    
@@ -175,17 +222,38 @@ def level_1():
         print('', end='\n\n')
         time.sleep(1.5)
         print('', end='\n\n')
+    room_1 = ()
+
+    lvl_1_options = np.array([])
 
     level_start()
-    print('What will you do?')
     time.sleep(2)
+    rpg_cycle = True
+    
+    #FIX_ME
+    while rpg_cycle:
+        print('What will you do?')
+        decision = input("")
+
+        outcome = tuple()
+        if len(decision) <= 0:
+            print("Your cosncience weighs heavily. You must do something!\n")
+            continue
+        else:
+            outcome = choice(lvl_1_options, decision)
+
+        if not outcome[-1]:
+            print("I can't " + outcome[1] + " right now.")
+            continue
+
+
     
     
 
 def play_game()-> int:
-    current_player = player
+    current_player = Player
     title()
-    intro(player)
+    intro(current_player)
     level_1()
 
     return current_player.score
