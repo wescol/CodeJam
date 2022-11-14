@@ -219,15 +219,13 @@ def level_1():
                 cprint(Fore.LIGHTMAGENTA_EX + x, attrs=[], end='')
                 sys.stdout.flush()
                 time.sleep(uniform(0,0.04))
-        print('', end='\n\n')
         time.sleep(1.5)
-        print('', end='\n\n')
     room_1 = ()
 
     lvl_1_options = np.array([])
 
     level_start()
-    time.sleep(2)
+    print('', end='\n\n\n')
     rpg_cycle = True
     
     #FIX_ME
