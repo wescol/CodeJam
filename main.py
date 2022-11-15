@@ -202,8 +202,8 @@ def level_1():
                 cprint(Fore.LIGHTMAGENTA_EX + x, attrs=[], end='')
                 sys.stdout.flush()
                 time.sleep(uniform(0,0.04))
-        print('', end='\n\n')
         time.sleep(1)
+        print('', end='\n\n')
         for x in 'A single light hangs dimly above you. ':
                 cprint(Fore.LIGHTMAGENTA_EX + x, attrs=[], end='')
                 sys.stdout.flush()
@@ -235,7 +235,12 @@ def level_1():
 
         outcome = tuple()
         if len(decision) <= 0:
-            print("Your cosncience weighs heavily. You must do something!\n")
+            for x in 'Your cosncience weighs heavily. You must do something!':
+                cprint(Fore.LIGHTMAGENTA_EX + x, attrs=[], end='')
+                sys.stdout.flush()
+                time.sleep(uniform(0,0.04))
+            time.sleep(1.5)
+            print('\n')
             continue
         else:
             outcome = choice(lvl_1_options, decision)
