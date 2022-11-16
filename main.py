@@ -220,7 +220,6 @@ def level_1():
                 sys.stdout.flush()
                 time.sleep(uniform(0,0.04))
         time.sleep(1.5)
-    room_1 = ()
 
     lvl_1_options = np.array([])
 
